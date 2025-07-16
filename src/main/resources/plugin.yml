@@ -3,6 +3,7 @@ version: '${project.version}'
 main: com.artillexstudios.axgraves.AxGraves
 api-version: '1.20'
 folia-supported: true
+softdepend: [WorldGuard]
 
 permissions:
   axgraves.help:
@@ -21,3 +22,9 @@ permissions:
     default: true
   axgraves.limit.1:
     default: false
+  grave.vip1:
+    default: false
+    description: "VIP level 1 - Extended grave despawn time (5 minutes)"
+  grave.vip2:
+    default: false
+    description: "VIP level 2 - Extended grave despawn time (10 minutes)"

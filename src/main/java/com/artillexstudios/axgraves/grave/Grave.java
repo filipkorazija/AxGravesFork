@@ -19,6 +19,7 @@ import com.artillexstudios.axgraves.utils.ExperienceUtils;
 import com.artillexstudios.axgraves.utils.InventoryUtils;
 import com.artillexstudios.axgraves.utils.LocationUtils;
 import com.artillexstudios.axgraves.utils.Utils;
+import com.artillexstudios.axgraves.utils.VipUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -109,8 +110,8 @@ public class Grave {
                 0.3
         );
 
-        int time = CONFIG.getInt("despawn-time-seconds", 180);
         hologram.addPlaceholder(new Placeholder((player1, string) -> {
+            int time = VipUtils.getDespawnTime(player);
             string = string.replace("%player%", playerName)
                 .replace("%xp%", "" + getStoredXP())
                 .replace("%item%", "" + countItems())
@@ -125,7 +126,7 @@ public class Grave {
     public void update() {
         int items = countItems();
 
-        int time = CONFIG.getInt("despawn-time-seconds", 180);
+        int time = VipUtils.getDespawnTime(player);
         boolean outOfTime = time * 1_000L <= (System.currentTimeMillis() - spawned);
         boolean despawn = CONFIG.getBoolean("despawn-when-empty", true);
         boolean empty = items == 0 && storedXP == 0;

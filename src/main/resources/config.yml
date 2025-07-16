@@ -5,6 +5,14 @@ prefix: "&#FF00FF&lAxGraves &7» "
 # in seconds
 despawn-time-seconds: 180
 
+# VIP despawn times based on permissions
+# Players with these permissions will have extended grave despawn times
+# The highest time will be used if a player has multiple VIP permissions
+vip-despawn-times:
+  grave:
+    vip1: 300  # 5 minutes
+    vip2: 600  # 10 minutes
+
 # should graves drop all items on the ground when they expire?
 # if false: items will be removed
 drop-items: true
@@ -103,6 +111,27 @@ blacklisted-death-causes:
 # should the grave disappear when all items get taken out of it?
 despawn-when-empty: true
 
+# Graveyard system configuration
+graveyard:
+  # enable or disable the graveyard system
+  enabled: false
+  # enable debug logging for graveyard system (helps troubleshoot issues)
+  debug: false
+  # list of allowed blocks where graves can spawn in graveyards
+  allowed-blocks:
+    - "GRAVEL"
+    - "DIRT"
+    - "GRASS_BLOCK"
+    - "STONE"
+  # WorldGuard regions that act as graveyards
+  # graves will try to spawn in these regions first before falling back to normal spawning
+  regions:
+    world:
+      - "graveyard1"
+      - "graveyard2"
+    world_nether:
+      - "nether_graveyard"
+
 save-graves:
   # should graves be saved if the server stops?
   enabled: true
@@ -124,4 +153,4 @@ update-notifier:
   on-join: true
 
 # do not edit
-version: 15
+version: 19

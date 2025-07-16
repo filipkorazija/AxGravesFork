@@ -3,6 +3,7 @@ package com.artillexstudios.axgraves.commands.subcommands;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axgraves.grave.Grave;
 import com.artillexstudios.axgraves.grave.SpawnedGraves;
+import com.artillexstudios.axgraves.utils.VipUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.artillexstudios.axgraves.AxGraves.CONFIG;
@@ -29,7 +31,6 @@ public enum SubCommandList {
 
         MESSAGEUTILS.sendFormatted(sender, MESSAGES.getString("grave-list.header"));
 
-        int dTime = CONFIG.getInt("despawn-time-seconds", 180);
         for (Grave grave : SpawnedGraves.getGraves()) {
             if (!sender.hasPermission("axgraves.list.other") &&
                     sender instanceof Player &&
@@ -37,6 +38,7 @@ public enum SubCommandList {
             ) continue;
 
             final Location l = grave.getLocation();
+            int dTime = VipUtils.getDespawnTime(grave.getPlayer());
 
             final Map<String, String> map = Map.of("%player%", grave.getPlayerName(),
                     "%world%", l.getWorld().getName(),
@@ -47,7 +49,9 @@ public enum SubCommandList {
 
             BaseComponent[] text = TextComponent.fromLegacyText(StringUtils.formatToString(MESSAGES.getString("grave-list.grave"), new HashMap<>(map)));
             for (BaseComponent component : text) {
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/axgraves tp %s %f %f %f", l.getWorld().getName(), l.getX(), l.getY(), l.getZ())));
+                // Use locale-independent formatting to ensure decimal points are always "." not ","
+                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, 
+                    String.format(Locale.US, "/axgraves tp %s %.6f %.6f %.6f", l.getWorld().getName(), l.getX(), l.getY(), l.getZ())));
             }
             sender.spigot().sendMessage(text);
         }

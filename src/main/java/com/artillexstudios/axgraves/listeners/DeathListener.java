@@ -5,6 +5,7 @@ import com.artillexstudios.axgraves.api.events.GraveSpawnEvent;
 import com.artillexstudios.axgraves.grave.Grave;
 import com.artillexstudios.axgraves.grave.SpawnedGraves;
 import com.artillexstudios.axgraves.utils.ExperienceUtils;
+import com.artillexstudios.axgraves.utils.GraveyardUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -40,7 +41,15 @@ public class DeathListener implements Listener {
         }
 
         Location location = player.getLocation();
-        location.add(0, -0.5, 0);
+        
+        // Try to find a graveyard location first
+        Location graveyardLocation = GraveyardUtils.findGraveyardLocation(location);
+        if (graveyardLocation != null) {
+            location = graveyardLocation;
+        } else {
+            // Use original death location if no graveyard found
+            location.add(0, -0.5, 0);
+        }
 
         List<ItemStack> drops = null;
         if (!event.getKeepInventory()) {
